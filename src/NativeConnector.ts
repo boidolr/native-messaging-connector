@@ -14,11 +14,15 @@ export enum NativeAppType {
 }
 
 function* getManifestLocations(search_location: ManifestSearchLocation): Generator<[string, NativeAppType]> {
-    if (os.platform() == "linux") {
+    if (os.platform() === "linux") {
         if (search_location & ManifestSearchLocation.Firefox) {
             yield ["/usr/lib/mozilla/native-messaging-hosts/", NativeAppType.Firefox];
 
             yield [path.join(process.env.HOME, ".mozilla/native-messaging-hosts/"), NativeAppType.Firefox];
+        }
+    } else if (os.platform() === "darwin") {
+        if (search_location & ManifestSearchLocation.Firefox) {
+            yield [path.join(process.env.HOME, "Library/Application Support/Mozilla/NativeMessagingHosts/"), NativeAppType.Firefox];
         }
     }
 }
